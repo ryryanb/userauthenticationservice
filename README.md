@@ -1,1 +1,1 @@
-# shopupspot
+# ShopUpSpot
