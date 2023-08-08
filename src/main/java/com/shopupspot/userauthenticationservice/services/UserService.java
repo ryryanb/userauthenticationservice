@@ -1,8 +1,6 @@
 package com.shopupspot.userauthenticationservice.services;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.shopupspot.userauthenticationservice.dto.UserRegistrationDto;
 import com.shopupspot.userauthenticationservice.dto.UserResponseDto;
+import com.shopupspot.userauthenticationservice.models.Profile;
 import com.shopupspot.userauthenticationservice.models.User;
+import com.shopupspot.userauthenticationservice.repositories.ProfileRepository;
 import com.shopupspot.userauthenticationservice.repositories.UserRepository;
 
 @Service
@@ -18,6 +18,10 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private ProfileRepository profileRepository;
+    
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;;
 
@@ -43,16 +47,19 @@ public class UserService {
 
         // Save the user along with the associated UserRole
         newUser = userRepository.save(newUser);
+        
+        Profile newProfile = new Profile();
+        newProfile.setAddress(registrationDto.getAddress());
+        newProfile.setEmail(registrationDto.getEmail());
+        newProfile.setFirstName(registrationDto.getFirstName());
+        newProfile.setLastName(registrationDto.getLastName());
+     newProfile.setUser(newUser); // Set the user for the profile
+     profileRepository.save(newProfile);
 
         // Create the UserResponseDto to return
         UserResponseDto responseDto = new UserResponseDto();
         responseDto.setId(newUser.getId());
-		/*
-		 * responseDto.setFirstName(newUser.getFirstName());
-		 * responseDto.setLastName(newUser.getLastName());
-		 * responseDto.setEmail(newUser.getEmail());
-		 */
-
+		
         // Get the roles from the user and set them in the response DTO
        /* List<String> roles = newUser.getUserRoles().stream()
             .map(userRole -> userRole.getRole().getName().name())

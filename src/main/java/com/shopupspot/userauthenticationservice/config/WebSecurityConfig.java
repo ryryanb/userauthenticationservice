@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,14 +14,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
-import com.shopupspot.userauthenticationservice.security.AuthenticationManagerProvider;
 import com.shopupspot.userauthenticationservice.security.JwtAuthenticationFilter;
-import com.shopupspot.userauthenticationservice.security.JwtTokenProvider;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 	
+	@Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 	
 	/*
 	 * @Bean public SecurityFilterChain securityFilterChain(HttpSecurity http)
@@ -68,7 +67,10 @@ public class WebSecurityConfig {
          //   )
 		.csrf().disable()
 		.authorizeRequests()
-		.anyRequest().permitAll();
+		.requestMatchers("/api/register", "/api/login").permitAll()
+		.anyRequest().authenticated()
+		.and().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);;
+		//.anyRequest().permitAll();
 		
 		
 		

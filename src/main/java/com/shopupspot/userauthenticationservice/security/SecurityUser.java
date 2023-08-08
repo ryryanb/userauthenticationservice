@@ -19,7 +19,7 @@ public class SecurityUser implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return user.getAuthorities().stream()
+		return getUser().getAuthorities().stream()
 				.map(a -> new SimpleGrantedAuthority(
 						a.getName()))
 				.collect(Collectors.toList());
@@ -27,16 +27,16 @@ public class SecurityUser implements UserDetails {
 
 	@Override
 	public String getPassword() {
-		return user.getPassword();
+		return getUser().getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		return user.getUserName();
+		return getUser().getUserName();
 	}
 	
 	public Long getId() {
-		return user.getId();
+		return getUser().getId();
 	}
 
 	@Override
@@ -57,6 +57,10 @@ public class SecurityUser implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	private User getUser() {
+		return user;
 	}
 	
 

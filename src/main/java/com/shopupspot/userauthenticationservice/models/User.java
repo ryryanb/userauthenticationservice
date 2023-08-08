@@ -2,12 +2,14 @@ package com.shopupspot.userauthenticationservice.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,11 +32,11 @@ public class User {
 	private Long id = 0L;
 	private String userName;
 	private String password;
-	private String firstName;
-	private String lastName;
-	private String email;
 
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Authority> authorities;
+	
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile; // Reference to the associated Profile entity
 
 }

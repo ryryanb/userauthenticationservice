@@ -9,11 +9,8 @@ import com.shopupspot.userauthenticationservice.models.User;
 
 @Repository
 public interface UserRepository extends PagingAndSortingRepository<User, Long> {
-    Optional<User> getByEmail(String username);
 
 	User save(User user);
-
-	Optional<User> findByEmail(String email);
 	
 	Optional<User> findByUserName(String userName);
 	
