@@ -17,9 +17,7 @@ API Endpoints
 	 Response: Status indicating successful registration or error message if registration fails.
 
 2.	User Login
-   
    Endpoint: POST /api/login
-   
    This endpoint handles user login and authentication.
    Request Body: User credentials (username/email and password)
    Response: JWT token upon successful login or error message if login fails.
